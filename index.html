@@ -1310,18 +1310,17 @@ Eu amo você. Não apenas pelo que representa para mim, mas por quem você é, i
       if (event.target === photoViewer) closePhoto();
     });
 
-    /*
-      As fotos devem estar em:
-      fotos/foto-01.jpg
-      fotos/foto-02.jpg
-      ...
-      fotos/foto-36.jpg
-
-      Se adicionar mais fotos, altere o número 36 no laço abaixo.
-    */
-    for (let i = 1; i <= 36; i++) {
-      const number = String(i).padStart(2, '0');
-      const src = `fotos/foto-${number}.jpg`;
+  
+/*
+  As fotos devem estar em:
+  fotos/foto (01).jpeg
+  fotos/foto (02).jpeg
+  ...
+  fotos/foto (36).jpeg
+*/
+for (let i = 1; i <= 36; i++) {
+  const number = String(i).padStart(2, '0');
+  const src = `fotos/foto (${number}).jpeg`;
 
       const button = document.createElement('button');
       button.type = 'button';
