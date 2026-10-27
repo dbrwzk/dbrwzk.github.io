@@ -1,0 +1,889 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071426">
+  <meta name="description" content="Um pequeno lugar feito para a Raquel.">
+  <title>Para você, Raquel</title>
+
+  <style>
+    :root {
+      --night: #06101f;
+      --navy: #0a1d36;
+      --blue: #173d66;
+      --white: #f5f7fb;
+      --muted: #a9bbd0;
+      --line: rgba(220,232,244,.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 24px;
+    }
+
+    body {
+      margin: 0;
+      color: var(--white);
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(34,79,125,.30), transparent 48%),
+        var(--night);
+      font-family: Georgia, "Times New Roman", serif;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+      opacity: .08;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+    }
+
+    .wrap {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      padding: 0 23px;
+    }
+
+    .hero {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 72px 22px 58px;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 50% 48%, rgba(30,67,108,.48), transparent 58%);
+    }
+
+    .hero-inner {
+      max-width: 620px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .28em;
+      color: #b9cce0;
+      font: 11px/1.6 Arial, sans-serif;
+    }
+
+    .lily {
+      color: #dfeafa;
+      font-size: 54px;
+      line-height: 1;
+      margin: 0 0 28px;
+      opacity: .92;
+      text-shadow: 0 0 36px rgba(174,208,244,.2);
+    }
+
+    h1 {
+      font-size: clamp(43px, 12vw, 76px);
+      font-weight: 400;
+      line-height: 1.06;
+      letter-spacing: -.045em;
+      margin: 18px 0;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 420px;
+      margin: 0 auto 30px;
+    }
+
+    .date {
+      letter-spacing: .14em;
+      color: #c8d9eb;
+      font: 12px Arial, sans-serif;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 12px 23px;
+      border: 1px solid rgba(220,232,244,.42);
+      border-radius: 99px;
+      color: var(--white);
+      background: rgba(7,20,38,.45);
+      text-decoration: none;
+      font: 12px Arial, sans-serif;
+      letter-spacing: .12em;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    .button:hover {
+      background: rgba(42,82,126,.45);
+      border-color: #dce8f4;
+    }
+
+    .hint {
+      font: 11px Arial, sans-serif;
+      color: #8098b5;
+      margin-top: 18px;
+    }
+
+    section { padding: 24px 0; }
+
+    /* CONTADOR */
+
+    .counter {
+      text-align: center;
+      padding: 26px 12px;
+      border: 1px solid var(--line);
+      background: rgba(14,34,58,.35);
+      margin: 0 auto;
+      max-width: 560px;
+    }
+
+    .counter-number {
+      font-size: clamp(48px, 14vw, 76px);
+      line-height: 1.2;
+    }
+
+    .counter-label {
+      font: 10px Arial, sans-serif;
+      letter-spacing: .14em;
+      color: var(--muted);
+    }
+
+    .counter-small {
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 7px;
+    }
+
+    /* TRÊS CAPAS DOS TEXTOS */
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .cover-card {
+      position: relative;
+      border: 1px solid var(--line);
+      background: #0a1d36;
+      padding: 0;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      cursor: pointer;
+      color: white;
+    }
+
+    .cover-card img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: transform .35s ease;
+    }
+
+    .cover-card:hover img { transform: scale(1.04); }
+
+    .cover-card span {
+      position: absolute;
+      inset: auto 0 0;
+      padding: 24px 4px 8px;
+      background: linear-gradient(transparent, rgba(5,15,29,.82));
+      font-size: 17px;
+    }
+
+    /* JANELA DOS TEXTOS */
+
+    .memory-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      padding: 22px;
+      background: rgba(2,8,17,.88);
+      backdrop-filter: blur(9px);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .memory-modal.open { display: flex; }
+
+    .modal-card {
+      width: min(520px, 100%);
+      max-height: 85vh;
+      overflow: auto;
+      position: relative;
+      padding: 35px 25px 28px;
+      border: 1px solid rgba(220,232,244,.22);
+      background: linear-gradient(145deg, #102743, #071426);
+      text-align: center;
+      box-shadow: 0 20px 80px #0008;
+    }
+
+    .modal-card p {
+      white-space: pre-line;
+      color: #e0e9f3;
+    }
+
+    .modal-close {
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      border: 0;
+      background: transparent;
+      color: #dce8f4;
+      font-size: 26px;
+      cursor: pointer;
+    }
+
+    /* LÍRIO, CARTA E GALERIA */
+
+    .hidden-note {
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .lily-button {
+      border: 0;
+      background: transparent;
+      color: #dce8f4;
+      font-size: 42px;
+      cursor: pointer;
+      padding: 14px 22px;
+      transition: transform .3s ease, text-shadow .3s ease;
+      text-shadow: 0 0 24px rgba(174,208,244,.18);
+    }
+
+    .lily-button:hover {
+      transform: scale(1.12);
+      text-shadow: 0 0 30px rgba(174,208,244,.5);
+    }
+
+    .lily-caption {
+      color: #8098b5;
+      font: 10px Arial, sans-serif;
+      letter-spacing: .12em;
+      margin-top: -8px;
+    }
+
+    .secret {
+      display: none;
+      margin-top: 24px;
+      padding: 28px 0 10px;
+      text-align: left;
+      animation: appear .7s ease both;
+    }
+
+    .secret.open { display: block; }
+
+    .secret h2 {
+      font-weight: 400;
+      font-size: clamp(27px, 6vw, 36px);
+      line-height: 1.3;
+      text-align: center;
+      margin: 0 0 28px;
+    }
+
+    .secret-text {
+      white-space: pre-line;
+      overflow-wrap: anywhere;
+      color: #e0e9f3;
+      line-height: 2;
+      font-size: 16px;
+    }
+
+    /* As fotos mantêm a proporção original: sem cortes ou deformações */
+
+    .final-gallery {
+      margin-top: 48px;
+      padding-top: 30px;
+      border-top: 1px solid var(--line);
+    }
+
+    .gallery-heading {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .gallery-heading h3 {
+      font-size: 26px;
+      font-weight: 400;
+      margin: 0 0 6px;
+    }
+
+    .gallery-heading p {
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 12px;
+    }
+
+    .gallery-slot {
+      position: relative;
+      width: 100%;
+      min-width: 0;
+      display: block;
+      padding: 0;
+      border: 1px solid rgba(220,232,244,.18);
+      background: rgba(19,47,78,.4);
+      cursor: pointer;
+      overflow: hidden;
+      color: #dce8f4;
+    }
+
+    .gallery-slot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      transition: opacity .3s ease;
+    }
+
+    .gallery-slot:hover img { opacity: .85; }
+
+    .gallery-slot span {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      padding: 3px 8px;
+      color: white;
+      background: rgba(5,15,29,.65);
+      font: 10px Arial, sans-serif;
+      opacity: .85;
+    }
+
+    /* FOTO AMPLIADA AO CLICAR */
+
+    .photo-viewer {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      padding: 20px;
+      background: rgba(1,5,12,.96);
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+
+    .photo-viewer.open { display: flex; }
+
+    .photo-viewer img {
+      display: block;
+      max-width: 100%;
+      max-height: 88vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .photo-viewer button {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      border: 0;
+      background: transparent;
+      color: white;
+      font-size: 36px;
+      cursor: pointer;
+    }
+
+    /* PLAYER DE MÚSICA — ABAIXO DO CONTEÚDO */
+
+    
+.music-section {
+  position: fixed;
+  z-index: 30;
+  left: 0;
+  right: 0;
+  bottom: max(12px, env(safe-area-inset-bottom));
+  padding: 0 16px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.music-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(360px, 100%);
+  margin: 0 auto;
+  padding: 10px 15px;
+  border: 1px solid rgba(220,232,244,.25);
+  border-radius: 50px;
+  background: rgba(5,15,29,.90);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 35px rgba(0,0,0,.35);
+  pointer-events: auto;
+}
+
+/* Evita que o player cubra o final do conteúdo */
+body {
+  padding-bottom: 95px;
+}
+
+    .music-play {
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(220,232,244,.35);
+      border-radius: 50%;
+      background: #183657;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .music-meta {
+      min-width: 0;
+      line-height: 1.35;
+      text-align: left;
+    }
+
+    .music-title {
+      font: 12px Arial, sans-serif;
+      color: #f5f7fb;
+    }
+
+    .music-artist {
+      font: 10px Arial, sans-serif;
+      color: #a9bbd0;
+      margin-top: 4px;
+    }
+
+    .music-note {
+      margin-left: auto;
+      color: #c8d9eb;
+      font-size: 19px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 20px 45px;
+      color: #9aafc7;
+      font-size: 14px;
+    }
+
+    footer .signature {
+      color: #f4f7fb;
+      font-size: 25px;
+      margin-top: 8px;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (min-width: 700px) {
+      section { padding: 38px 0; }
+      .gallery { gap: 18px; }
+    }
+
+    @media (max-width: 380px) {
+      .wrap { padding: 0 16px; }
+      .cover-grid { gap: 6px; }
+      .cover-card span { font-size: 14px; }
+      .gallery { gap: 8px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ABERTURA -->
+  <header class="hero" id="inicio">
+    <div class="hero-inner">
+      <div class="lily" aria-hidden="true">❧</div>
+      <div class="eyebrow">um pequeno lugar no mundo</div>
+
+      <h1>Para você,<br>Raquel.</h1>
+
+      <p>
+        Há coisas que eu consigo escrever melhor do que dizer
+        olhando nos seus olhos. Então, deixei algumas delas aqui.
+      </p>
+
+      <div class="date">23 · 09 · 2026</div>
+
+      <div style="margin-top:30px">
+        <a class="button" href="#dias">ENTRAR →</a>
+      </div>
+
+      <div class="hint">feito com carinho, por mim, para você</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- CONTADOR DA DATA EM QUE VOCÊS SE CONHECERAM -->
+    <section id="dias">
+      <div class="wrap">
+        <div class="counter">
+          <div class="counter-number" id="days">—</div>
+          <div class="counter-label">DIAS DESDE O NOSSO COMEÇO</div>
+          <div class="counter-small" id="elapsed"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AS TRÊS CAPAS DOS TEXTOS -->
+    <section id="textos">
+      <div class="wrap">
+        <div class="cover-grid" id="memoryGallery"
+             aria-label="Capas dos nossos textos"></div>
+      </div>
+    </section>
+
+    <!-- LÍRIO: AO CLICAR, REVELA A CARTA E DEPOIS A GALERIA -->
+    <section id="carta">
+      <div class="wrap">
+        <div class="hidden-note">
+          <button
+            class="lily-button"
+            id="openLetter"
+            aria-label="Abrir a carta"
+            aria-expanded="false"
+            aria-controls="secretLetter"
+          >✿</button>
+
+          <div class="lily-caption">uma última coisa, só sua</div>
+
+          <article class="secret" id="secretLetter">
+            <h2>Uma carta para você.</h2>
+
+            <div class="secret-text" id="letterText">
+COLE AQUI O TEXTO COMPLETO DA SUA CARTA.
+
+Você pode escrever quantos parágrafos quiser.
+Basta substituir este texto pelo conteúdo da sua carta.
+            </div>
+
+            <!-- A GALERIA APARECE ABAIXO DA CARTA -->
+            <div class="final-gallery">
+              <div class="gallery-heading">
+                <h3>Nós.</h3>
+                <p>Pequenos pedaços de uma coisa enorme.</p>
+              </div>
+
+              <div
+                class="gallery"
+                id="letterGallery"
+                aria-label="Galeria de nossas fotos"
+              ></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PLAYER ABAIXO DE TODO O CONTEÚDO PRINCIPAL -->
+  <section class="music-section" aria-label="Nossa música">
+    <div class="music-player">
+      <button
+        class="music-play"
+        id="musicPlay"
+        aria-label="Tocar música"
+      >▶</button>
+
+      <div class="music-meta">
+        <div class="music-title">Tudo Que Você Quiser</div>
+        <div class="music-artist">Luan Santana</div>
+      </div>
+
+      <div class="music-note" aria-hidden="true">♫</div>
+
+      <audio id="loveSong" preload="none" loop>
+        <source src="musica/tudo-que-voce-quiser.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+      </audio>
+    </div>
+  </section>
+
+  <footer>
+    <div class="signature">Com amor. ❤️</div>
+    <div style="font:11px Arial,sans-serif;letter-spacing:.15em;margin-top:12px">
+      23 · 09 · 2026
+    </div>
+  </footer>
+
+  <!-- MODAL DOS TRÊS TEXTOS -->
+  <div
+    class="memory-modal"
+    id="memoryModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+    <article class="modal-card">
+      <button class="modal-close" id="closeMemory" aria-label="Fechar">×</button>
+      <div class="lily" aria-hidden="true" style="font-size:34px;margin-bottom:12px">
+        ❧
+      </div>
+      <h2 id="modalTitle" style="font-weight:400;font-size:22px">Um texto para você</h2>
+      <p id="modalText"></p>
+    </article>
+  </div>
+
+  <!-- FOTO AMPLIADA -->
+  <div
+    class="photo-viewer"
+    id="photoViewer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Foto ampliada"
+  >
+    <button id="closePhoto" aria-label="Fechar foto">×</button>
+    <img id="expandedPhoto" src="" alt="Nossa foto ampliada">
+  </div>
+
+  <script>
+    /* DATA DO COMEÇO DE VOCÊS */
+    const startDate = new Date(2026, 8, 23, 0, 0, 0);
+
+    function updateCounter() {
+      const now = new Date();
+      const ms = Math.max(0, now - startDate);
+
+      document.getElementById('days').textContent =
+        Math.floor(ms / 86400000);
+
+      const hours = Math.floor((ms % 86400000) / 3600000);
+      const minutes = Math.floor((ms % 3600000) / 60000);
+      const seconds = Math.floor((ms % 60000) / 1000);
+
+      document.getElementById('elapsed').textContent =
+        `${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    updateCounter();
+    setInterval(updateCounter, 1000);
+
+
+    /* EDITE AQUI OS TRÊS TEXTOS */
+    const memories = [
+      {
+        title: 'I',
+        text: 'O começo de uma lembrança que eu quero guardar.'
+      },
+      {
+        title: 'II',
+        text: 'Eu gosto de pensar que esse instante é só nosso.'
+      },
+      {
+        title: 'III',
+        text: 'Uma foto pequena, um sentimento enorme.'
+      }
+    ];
+
+
+    /* CRIA AS TRÊS CAPAS */
+    const memoryGallery = document.getElementById('memoryGallery');
+
+    memories.forEach((memory, index) => {
+      const number = String(index + 1).padStart(2, '0');
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'cover-card';
+      button.setAttribute('aria-label', `Abrir texto ${index + 1}`);
+
+      const img = document.createElement('img');
+      img.src = `fotos/foto-${number}.jpg`;
+      img.alt = `Capa do texto ${index + 1}`;
+
+      img.onerror = () => {
+        img.remove();
+        button.style.background =
+          'linear-gradient(145deg, #173d66, #071426)';
+      };
+
+      const label = document.createElement('span');
+      label.textContent = memory.title;
+
+      button.append(img, label);
+
+      button.addEventListener('click', () => {
+        document.getElementById('modalTitle').textContent = memory.title;
+        document.getElementById('modalText').textContent = memory.text;
+        document.getElementById('memoryModal').classList.add('open');
+        document.getElementById('closeMemory').focus();
+      });
+
+      memoryGallery.appendChild(button);
+    });
+
+
+    /* FECHAR OS TEXTOS */
+    const memoryModal = document.getElementById('memoryModal');
+
+    function closeMemory() {
+      memoryModal.classList.remove('open');
+    }
+
+    document.getElementById('closeMemory')
+      .addEventListener('click', closeMemory);
+
+    memoryModal.addEventListener('click', event => {
+      if (event.target === memoryModal) closeMemory();
+    });
+
+
+    /* GALERIA: FOTOS COM PROPORÇÕES ORIGINAIS */
+    const letterGallery = document.getElementById('letterGallery');
+    const photoViewer = document.getElementById('photoViewer');
+    const expandedPhoto = document.getElementById('expandedPhoto');
+
+    function openPhoto(src, alt) {
+      expandedPhoto.src = src;
+      expandedPhoto.alt = alt;
+      photoViewer.classList.add('open');
+      document.getElementById('closePhoto').focus();
+    }
+
+    function closePhoto() {
+      photoViewer.classList.remove('open');
+      expandedPhoto.src = '';
+    }
+
+    document.getElementById('closePhoto')
+      .addEventListener('click', closePhoto);
+
+    photoViewer.addEventListener('click', event => {
+      if (event.target === photoViewer) closePhoto();
+    });
+
+    /*
+      As fotos devem estar em:
+      fotos/foto-01.jpg
+      fotos/foto-02.jpg
+      ...
+      fotos/foto-36.jpg
+
+      Se adicionar mais fotos, altere o número 36 no laço abaixo.
+    */
+    for (let i = 1; i <= 36; i++) {
+      const number = String(i).padStart(2, '0');
+      const src = `fotos/foto-${number}.jpg`;
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'gallery-slot';
+      button.setAttribute('aria-label', `Ampliar nossa foto ${i}`);
+
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = `Nossa foto ${i}`;
+      img.loading = 'lazy';
+
+      /* Se o arquivo não existir, não deixa um espaço vazio */
+      img.onerror = () => button.remove();
+
+      const label = document.createElement('span');
+      label.textContent = number;
+
+      button.append(img, label);
+
+      button.addEventListener('click', () => {
+        openPhoto(src, `Nossa foto ${i}`);
+      });
+
+      letterGallery.appendChild(button);
+    }
+
+
+    /* ABRIR E FECHAR CARTA + GALERIA PELO LÍRIO */
+    const openLetterButton = document.getElementById('openLetter');
+    const secretLetter = document.getElementById('secretLetter');
+
+    openLetterButton.addEventListener('click', function() {
+      const isOpen = secretLetter.classList.toggle('open');
+
+      this.setAttribute('aria-expanded', String(isOpen));
+      this.textContent = isOpen ? '✧' : '✿';
+      this.setAttribute(
+        'aria-label',
+        isOpen ? 'Fechar a carta e a galeria' : 'Abrir a carta'
+      );
+
+      if (isOpen) {
+        setTimeout(() => {
+          secretLetter.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }, 100);
+      }
+    });
+
+
+    /* PLAYER DE MÚSICA */
+    const song = document.getElementById('loveSong');
+    const musicPlay = document.getElementById('musicPlay');
+
+    musicPlay.addEventListener('click', async () => {
+      if (song.paused) {
+        try {
+          await song.play();
+          musicPlay.textContent = 'Ⅱ';
+          musicPlay.setAttribute('aria-label', 'Pausar música');
+        } catch (error) {
+          alert(
+            'Não consegui tocar a música. Confira se o arquivo MP3 está na pasta musica.'
+          );
+        }
+      } else {
+        song.pause();
+        musicPlay.textContent = '▶';
+        musicPlay.setAttribute('aria-label', 'Tocar música');
+      }
+    });
+
+    song.addEventListener('pause', () => {
+      musicPlay.textContent = '▶';
+      musicPlay.setAttribute('aria-label', 'Tocar música');
+    });
+
+    song.addEventListener('play', () => {
+      musicPlay.textContent = 'Ⅱ';
+      musicPlay.setAttribute('aria-label', 'Pausar música');
+    });
+
+
+    /* TECLA ESC FECHA MODAIS */
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') {
+        closeMemory();
+        closePhoto();
+      }
+    });
+  </script>
+</body>
+</html>
